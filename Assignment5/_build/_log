@@ -1,0 +1,16 @@
+### Starting build.
+# Target: Typeinf.ml.depends, tags: { extension:ml, file:Typeinf.ml, ocaml, ocamldep, package(cs691f), package(oUnit), package(pa_ounit.syntax), quiet, syntax(camlp4o) }
+ocamlfind ocamldep -package oUnit -package cs691f -syntax camlp4o -package pa_ounit.syntax -modules Typeinf.ml > Typeinf.ml.depends
+# Target: Typeinf.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:Typeinf.cmo, file:Typeinf.ml, implem, ocaml, package(cs691f), package(oUnit), package(pa_ounit.syntax), quiet, syntax(camlp4o) }
+ocamlfind ocamlc -c -package oUnit -package cs691f -syntax camlp4o -package pa_ounit.syntax -o Typeinf.cmo Typeinf.ml
++ ocamlfind ocamlc -c -package oUnit -package cs691f -syntax camlp4o -package pa_ounit.syntax -o Typeinf.cmo Typeinf.ml
+File "Typeinf.ml", line 255, characters 37-68:
+Warning 10: this expression should have type unit.
+# Target: Typeinf.d.cmo, tags: { byte, compile, debug, extension:cmo, extension:ml, file:Typeinf.d.cmo, file:Typeinf.ml, implem, ocaml, package(cs691f), package(oUnit), package(pa_ounit.syntax), quiet, syntax(camlp4o) }
+ocamlfind ocamlc -c -g -package oUnit -package cs691f -syntax camlp4o -package pa_ounit.syntax -o Typeinf.d.cmo Typeinf.ml
++ ocamlfind ocamlc -c -g -package oUnit -package cs691f -syntax camlp4o -package pa_ounit.syntax -o Typeinf.d.cmo Typeinf.ml
+File "Typeinf.ml", line 255, characters 37-68:
+Warning 10: this expression should have type unit.
+# Target: Typeinf.d.byte, tags: { byte, debug, dont_link_with, extension:byte, file:Typeinf.d.byte, link, ocaml, package(cs691f), package(oUnit), package(pa_ounit), program, quiet }
+ocamlfind ocamlc -linkpkg -g -package pa_ounit -package oUnit -package cs691f Typeinf.d.cmo -o Typeinf.d.byte
+# Compilation successful.

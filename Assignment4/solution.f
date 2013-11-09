@@ -163,3 +163,89 @@ let insert =fun(n:int) ->  fun(lst:[[List int]]) ->
 
 let insertion_sort = fun(lst:[[List int]]) -> 
                        fold_right <int> <[[List int]]> (fun(hd:int) -> fun(tl:[[List int]]) -> pair_proj1 <[[List int]]> (insert hd tl) ) lst (empty<int>);;  
+
+
+type [[BTree T]] = forall R. (T->R->R->R) -> R -> R 
+
+;;
+
+let node = typfun T ->fun(v:T) -> 
+                       fun (l:[[BTree T]]) ->
+                         fun(r:[[BTree T]]) -> 
+                    typfun R -> fun(t :T->R->R->R) -> fun(n:R) -> 
+                         t v (l <R> t n) (r <R> t n) 
+;;   
+ 
+let nil  = typfun T -> 
+              typfun R ->
+                  fun(t:T->R->R->R) -> fun(n:R) -> 
+                        n;;
+
+let tree_fold = typfun A -> typfun B -> 
+                   fun(f:A->B->B->B) -> fun(x:[[BTree A]]) -> fun(init:B) -> 
+                     x <B> f init  ;;  
+
+let tree_insert_internal = fun(n:int) -> fun(t:[[BTree int]]) -> 
+tree_fold <int> <[[Pair [[BTree int]]]]> ( fun(m:int) -> fun(l:[[Pair [[BTree int]]]]) -> fun(r:[[Pair [[BTree int]]]]) ->
+ if <[[Pair [[BTree int]]]]> (n<m)
+(parts<[[BTree int]]> 
+(node <int> m (pair_proj1 <[[BTree int]]> l) (pair_proj2 <[[BTree int]]> r))
+(node <int> m (pair_proj2 <[[BTree int]]> l) (pair_proj2 <[[BTree int]]> r))
+)
+(
+if <[[Pair [[BTree int]]]]> (n>m)
+(
+parts<[[BTree int]]> 
+(node <int> m (pair_proj2 <[[BTree int]]> l) (pair_proj1 <[[BTree int]]> r))
+(node <int> m (pair_proj2 <[[BTree int]]> l) (pair_proj2 <[[BTree int]]> r))
+)
+(
+parts<[[BTree int]]>
+(node <int> m (node <int> n (pair_proj2 <[[BTree int]]> l) (nil<int>) ) (pair_proj2 <[[BTree int]]> r))
+(node <int> m (pair_proj2 <[[BTree int]]> l)(pair_proj2 <[[BTree int]]> r))
+)
+)
+) t (parts <[[BTree int]]> (node <int> n (nil<int>) (nil<int>)) (nil <int>))  
+
+;;
+
+let tree_insert = fun(n:int) -> fun(t:[[BTree int]]) -> pair_proj1 <[[BTree int]]> (tree_insert_internal n t) 
+
+;;
+
+let tree_find = fun(n:int) -> fun(t:[[BTree int]]) -> 
+tree_fold <int> <[[Bool]]> (fun (m:int) -> fun (l:[[Bool]]) -> fun(r:[[Bool]]) -> 
+if <[[Bool]]> (n = m) 
+(true)
+(if <[[Bool]]> (n<m) (l) (r))
+) t false  
+
+;;
+
+let x = triple <int> <int> <int> 1 2 3 ;; 
+triple_proj1 <int> <int> <int>  x;;
+triple_proj2 <int> <int> <int>  x;;
+triple_proj3 <int> <int> <int>  x;;
+
+not true <int >  1 2 ;; 
+nand true true <int >  1 2 ;; 
+xor true true <int >  1 2 ;; 
+
+let a = bar <int> 1 2;; 
+let b = baz <int> ;; 
+foo_proj1 <int> a 3 ;; 
+foo_proj2 <int> a 3 ;; 
+foo_proj1 <int> b 3 ;; 
+foo_proj2 <int> b 3 ;; 
+
+let exlist = cons <int> 100 ( cons <int> 200 ( cons <int> 150 (empty <int>)));;
+rev <int> exlist ;; 
+
+let exlist2 = cons <int> 100 ( cons <int> 200 ( cons <int> 150 ( cons<int> 10 (empty <int>)))) ;; 
+insertion_sort exlist2 ;; 
+
+let extree = node <int> 10 ( node <int> 5 ( nil <int>) (nil<int>) ) ( node <int> 15 (nil<int>) (nil<int>)) ;; 
+tree_insert 100 extree ;; 
+
+tree_find 10 extree <int> 1 2 ;;  
+
